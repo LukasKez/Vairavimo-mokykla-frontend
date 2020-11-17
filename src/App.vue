@@ -1,45 +1,20 @@
 <template>
   <v-app>
-    <div class="d-flex justify-center">
-      <h1 id="addTask">Add Task</h1>
-    </div>
-    <div class="d-flex justify-center mb-4">
-      <v-col cols="4">
-        <v-text-field v-model="task" label="Task name" solo hide-details />
-      </v-col>
-      <v-col cols="4">
-        <v-select
-          :items="options"
-          v-model="status"
-          label="Select status"
-          single-line
-          item-text="name"
-          item-value="id"
-          solo
-          hide-details
-        />
-      </v-col>
-    </div>
-    <div class="d-flex justify-center">
-      <v-btn @click="addTask()" color="primary" class="mb-5">Add Task</v-btn>
-    </div>
+    <v-toolbar app dark>
+      <v-toolbar-title class="headline ">
+        <span>Vuetify</span>
+        <span class="font-weight-light">Material design</span>
+        <a class="" href="/">Home</a>
+        <a class="" href="/about">About</a>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
 
-    <!-- Task list -->
-    <div class="d-flex justify-center">
-      <h1>Tasks</h1>
-    </div>
-    <div v-for="task in tasks" :key="task._id">
-      <v-card class="mx-auto my-4" color="white" dark max-width="800">
-        <v-card-text class="font-weight-bold title blue--text">
-          {{ task.name }}
-          {{ task.status.toString() }}
-          <v-list-item id="task-list-item" class="grow">
-            <v-btn @click="completeTodo(task._id)" class="mx-2" small color="green">Update(NYI)</v-btn>
-            <v-btn @click="deleteTask(task._id)" class="mx-2" small color="red">Delete</v-btn>
-          </v-list-item>
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+
+
   </v-app>
 </template>
 <script>
@@ -51,6 +26,13 @@ export default {
     tasks: [],
     options: ["pending", "ongoing", "completed"],
   }),
+  created() {
+    // fetch tasks
+    axios
+      .get("http://localhost:3000/tasks")
+      .then((response) => (this.tasks = response.data))
+      .catch((error) => console.log(error));
+  },
   methods: {
     addTask() {
       axios
@@ -69,13 +51,6 @@ export default {
           console.log(response.data);
       });
     },
-  },
-  created() {
-    // fetch tasks
-    axios
-      .get("http://localhost:3000/tasks")
-      .then((response) => (this.tasks = response.data))
-      .catch((error) => console.log(error));
-  },
+  }
 };
 </script>
