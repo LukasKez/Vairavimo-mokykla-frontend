@@ -1,56 +1,19 @@
 <template>
-  <v-app>
-    <v-toolbar app dark>
-      <v-toolbar-title class="headline ">
-        <span>Vuetify</span>
-        <span class="font-weight-light">Material design</span>
-        <a class="" href="/">Home</a>
-        <a class="" href="/about">About</a>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+  <div id="app" data-app>
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+      <router-link to="/" class="navbar-brand">Driving School</router-link>
+      <div class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <router-link to="/users" class="nav-link">Users</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/users/add" class="nav-link">Add user</router-link>
+        </li>
+      </div>
+    </nav>
 
-    <v-content>
-      <router-view></router-view>
-    </v-content>
-
-
-  </v-app>
+    <div class="container mt-3">
+      <router-view />
+    </div>
+  </div>
 </template>
-<script>
-import axios from "axios";
-export default {
-  data: () => ({
-    task: "",
-    status: "",
-    tasks: [],
-    options: ["pending", "ongoing", "completed"],
-  }),
-  created() {
-    // fetch tasks
-    axios
-      .get("http://localhost:3000/tasks")
-      .then((response) => (this.tasks = response.data))
-      .catch((error) => console.log(error));
-  },
-  methods: {
-    addTask() {
-      axios
-        .post("http://localhost:3000/tasks", {
-          name: this.task,
-          status: this.status,
-        })
-        .then((response) => {
-          this.message = response.data;
-        });
-    },
-    deleteTask(taskId) {
-      axios
-        .delete("http://localhost:3000/tasks/" + taskId)
-        .then((response) => {
-          console.log(response.data);
-      });
-    },
-  }
-};
-</script>

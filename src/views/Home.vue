@@ -38,7 +38,7 @@
         </v-card-text>
       </v-card>
     </div> -->
-    <div><h1>Home page</h1></div>
+  <h1>Welcome to the Driving school managment system</h1>
 </template>
 
 <script>
