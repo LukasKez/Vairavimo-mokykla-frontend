@@ -1,8 +1,9 @@
 import http from "../http-common";
+import authHeader from './AuthHeader';
 
 class UserDataService {
   getAll() {
-    return http.get("/users");
+    return http.get("/users", { headers: authHeader() });
   }
 
   get(id) {

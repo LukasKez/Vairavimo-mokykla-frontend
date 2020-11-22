@@ -1,20 +1,31 @@
 <template>
   <v-app>
     <b-navbar toggleable="md" type="dark" class="indigo lighten-1 light--text">
-      <b-navbar-brand href="/"
-        ><img src="./assets/steering-wheel.svg"
-      /></b-navbar-brand>
+      <b-navbar-brand>
+        <router-link to="/">
+          <img src="./assets/steering-wheel.svg"/>
+        </router-link>
+      </b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/users">Users</b-nav-item>
+          <b-nav-item>
+            <router-link to="/users">Users</router-link>
+          </b-nav-item>
           <!-- <b-nav-item href="#" disabled>Disabled</b-nav-item> -->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="/login">Login</b-nav-item>
+          <b-nav-item v-if="!currentUser">
+            <router-link to="/login">Login</router-link>
+          </b-nav-item>
+          <div v-if="currentUser">
+            
+            <b-nav-item v-if="currentUser" @click.prevent="logOut()">Logout</b-nav-item>
+          </div>
+          
 
           <!-- <b-nav-item-dropdown right>
             <template #button-content>
@@ -58,13 +69,26 @@
 
 <script>
 export default {
-  data: () => ({
+  data() {
+    return {
       icons: [
         'mdi-facebook',
         'mdi-twitter',
         'mdi-linkedin',
         'mdi-instagram',
       ],
-    }),
+    };
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
