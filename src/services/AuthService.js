@@ -10,6 +10,7 @@ class AuthService {
       .then(response => {
         if (response.data.accessToken) {
           localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem('userData', atob(response.data.accessToken.split('.')[1]));
         }
 
         return response.data;
@@ -18,6 +19,7 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('userData');
   }
 }
 

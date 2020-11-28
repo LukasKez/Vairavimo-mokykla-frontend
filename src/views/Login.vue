@@ -1,6 +1,6 @@
 <template>
   <v-layout row class="justify-center">
-    <v-flex xs4 class="grey lighten-4">
+    <v-flex xs10 sm6 md5 class="grey lighten-4">
       <v-container class="text-center">
         <v-card flat>
           <v-card-title primary-title>
@@ -34,13 +34,11 @@
                 Login
               </v-btn>
             </v-card-actions>
-            <div
-              v-if="message"
-              class="alert alert-danger"
-              role="alert"
-            >
-              {{ message }}
-            </div>
+            <v-alert
+                v-if="message"
+                type="error"
+                dismissible
+            >{{ message }}</v-alert>
           </v-form>
         </v-card>
       </v-container>
