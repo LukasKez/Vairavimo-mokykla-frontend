@@ -52,6 +52,7 @@
                 <v-date-picker
                     v-model="date"
                     color="indigo lighten-1"
+                    reactive
                 ></v-date-picker>
               </v-col>
               <v-col cols="12" sm="6" md="6">
@@ -155,6 +156,7 @@
             @click:event="showEvent"
             @click:more="viewDay"
             @click:date="viewDay"
+            :interval-format="intervalFormat"
         ></v-calendar>
         <v-menu
             v-model="selectedOpen"
@@ -181,7 +183,7 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span> {{ selectedEvent.start | moment('hh:mm') }} - {{ selectedEvent.end | moment('hh:mm') }}</span>
+              <span> {{ selectedEvent.start | moment('HH:mm') }} - {{ selectedEvent.end | moment('HH:mm') }}</span>
               <v-spacer></v-spacer>
             </v-card-text>
             <v-card-actions>
@@ -272,6 +274,9 @@ export default {
     },
   },
   methods: {
+    intervalFormat(interval) {
+      return interval.time
+    },
     getLectures(id) {
       if (this.$store.state.auth.userData.role === 4 && this.$store.state.auth.userData.userId === id) {
         this.getLecturerLectures(id);
@@ -289,8 +294,8 @@ export default {
             let startTime = lecture.date;
             let name = lecture.type;
             event.lecturer = lecture.lecturer
-            event.start = moment(startTime).format("YYYY-MM-DD hh:mm");
-            event.end = moment(startTime).add(1, 'hours').add(30, 'minutes').format("YYYY-MM-DD hh:mm")
+            event.start = moment(startTime).format("YYYY-MM-DD HH:mm");
+            event.end = moment(startTime).add(1, 'hours').add(30, 'minutes').format("YYYY-MM-DD HH:mm")
             event.name = name;
             event.id = lecture._id;
             if (name === 'Teorija')
@@ -315,8 +320,8 @@ export default {
                 let startTime = lecture.date;
                 let name = lecture.type;
                 event.lecturer = lecture.lecturer
-                event.start = moment(startTime).format("YYYY-MM-DD hh:mm");
-                event.end = moment(startTime).add(1, 'hours').add(30, 'minutes').format("YYYY-MM-DD hh:mm")
+                event.start = moment(startTime).format("YYYY-MM-DD HH:mm");
+                event.end = moment(startTime).add(1, 'hours').add(30, 'minutes').format("YYYY-MM-DD HH:mm")
                 event.name = name;
                 event.id = lecture._id;
                 event.students = lecture.students;
@@ -380,17 +385,14 @@ export default {
       this.componentKey += 1;
     },
     editLecture (event) {
-      console.log(event)
-      this.dialog = true
       this.editedId = event.id
       this.editedLecture.type = event.name
       this.editedLecture.id = event.id
       this.editedLecture.lecturer = event.lecturer._id
       this.editedLecture.students = event.students
-      this.time = this.$moment(event.start.substr(0,10)).toISOString()
-      this.date = event.start.substr(11,5)
-      console.log(this.time)
-      console.log(this.date)
+      this.date = this.$moment(event.start.substr(0,10)).format("YYYY-MM-DD")
+      this.time = event.start.substr(11,5)
+      this.dialog = true
     },
     close() {
       this.dialog = false;
@@ -409,6 +411,7 @@ export default {
           LectureDataService.create(this.editedLecture)
 
           this.close();
+          this.refreshList()
         }
       } else {
         if (this.$refs.form.validate()) {
@@ -416,9 +419,10 @@ export default {
           let timeArr = this.time.split(':');
           let currentDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1]);
           this.editedLecture.date = this.$moment(currentDate).format();
-          LectureDataService.create(this.editedLecture)
+          LectureDataService.update(this.editedId, this.editedLecture)
 
           this.close();
+          this.refreshList()
         }
       }
     },

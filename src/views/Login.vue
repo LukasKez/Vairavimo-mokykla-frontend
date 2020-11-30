@@ -81,6 +81,7 @@ export default {
               this.$router.push("/");
             },
             (error) => {
+              console.log(error)
               this.message = error.response.data.message;
             }
           );

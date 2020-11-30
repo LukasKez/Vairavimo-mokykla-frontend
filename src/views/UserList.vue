@@ -142,6 +142,7 @@
         </v-icon>
         <v-icon
             small
+            v-if="userData.role > 4"
             @click="deleteUser(item)"
         >
           mdi-delete
@@ -220,6 +221,9 @@ export default {
   computed: {
     formTitle() {
       return this.editedId === -1 ? "New User" : "Edit User";
+    },
+    userData() {
+      return this.$store.state.auth.userData;
     },
   },
   watch: {

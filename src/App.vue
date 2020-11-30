@@ -14,10 +14,6 @@
             <v-icon dark class="mx-1">mdi-account-multiple</v-icon>
             <router-link to="/users">Users</router-link>
           </b-nav-item>
-          <b-nav-item v-if="currentUser && (userData.role > 1)">
-            <v-icon dark class="mx-1">mdi-format-list-bulleted</v-icon>
-            <router-link to="/lectures">Lectures</router-link>
-          </b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
