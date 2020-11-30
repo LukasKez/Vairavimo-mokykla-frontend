@@ -1,5 +1,5 @@
 <template>
-  <h1>Welcome to the Driving school managment system</h1>
+  <img src="../assets/bmw-wallpaper.jpg" width="100%" height="auto" class="mt-0">
 </template>
 
 <script>

@@ -98,30 +98,24 @@
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-row>
                   <v-col cols="6" align="right" class="font-weight-medium title">
                     ID
                   </v-col>
                   <v-col cols="6" class="title">
                     {{ user._id }}
                   </v-col>
-                </v-row>
                 <v-col cols="6" align="right" class="font-weight-medium title">
                   Name
                 </v-col>
                 <v-col cols="6" class="title">
                   {{ user.name }}
                 </v-col>
-              </v-row>
-              <v-row>
                 <v-col cols="6" align="right" class="font-weight-medium title">
                   Surname
                 </v-col>
                 <v-col cols="6" class="title">
                   {{ user.surname }}
                 </v-col>
-              </v-row>
-              <v-row>
                 <v-col cols="6" align="right" class="font-weight-medium title">
                   Username
                 </v-col>
@@ -224,7 +218,7 @@ export default {
       }
     },
     refresh() {
-      // this.getUser(this.user._id);
+      this.$forceUpdate();
     },
   },
   mounted() {

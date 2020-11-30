@@ -237,7 +237,9 @@ export default {
           this.offices = response.data;
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response) {
+            this.message = e.response.statusText;
+          }
         });
     },
 
@@ -298,9 +300,19 @@ export default {
     save() {
       if (this.$refs.form.validate()) {
         if (this.editedId != -1) {
-          UserDataService.update(this.editedId, this.editedUser);
+          UserDataService.update(this.editedId, this.editedUser)
+            .catch((e) => {
+              if (e.response) {
+                this.message = e.response.statusText;
+              }
+            });
       } else {
-          UserDataService.create(this.editedUser);
+          UserDataService.create(this.editedUser)
+              .catch((e) => {
+                if (e.response) {
+                  this.message = e.response.statusText;
+                }
+              });
           this.refreshList()
         }
       this.close();

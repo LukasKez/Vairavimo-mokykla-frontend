@@ -45,7 +45,11 @@
       </b-collapse>
     </b-navbar>
 
-    <div class="container mt-10" style="min-height: 100vh">
+    <div v-if="this.$router.currentRoute.name === 'home'" style="min-height: 75vh">
+      <router-view />
+    </div>
+
+    <div v-if="this.$router.currentRoute.name !== 'home'" class="container mt-10" style="min-height: 100vh">
       <router-view />
     </div>
   

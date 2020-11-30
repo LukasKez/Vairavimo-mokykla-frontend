@@ -2,35 +2,23 @@
   <v-dialog v-model="show" max-width="700px">
     <v-card>
       <v-card-title>
-        <span class="headline">Add lecture</span>
+        <span class="headline">{{formTitle}}</span>
       </v-card-title>
 
       <v-card-text>
         <v-form ref="form" lazy-validation>
           <v-row>
-            <v-col cols="12" sm="12" md="12">
+            <v-col cols="12" sm="6" md="6">
               <v-select
                   :items="lectureTypes"
                   v-model="editedLecture.type"
                   label="Type"
                   color="indigo"
+                  item-color="indigo"
+                  height="42"
               ></v-select>
             </v-col>
             <v-col cols="12" sm="6" md="6">
-              <v-date-picker
-                  v-model="editedLecture.date"
-                  color="indigo lighten-1"
-              ></v-date-picker>
-            </v-col>
-            <v-col cols="12" sm="6" md="6">
-              <v-time-picker
-                  v-model="editedLecture.time"
-                  color="indigo lighten-1"
-                  width="260"
-                  format="24hr"
-              ></v-time-picker>
-            </v-col>
-            <v-col cols="12" sm="12" md="12">
               <v-select
                   v-model="editedLecture.students"
                   :items="students"
@@ -47,7 +35,7 @@
                 </template>
                 <!-- HTML that describe how select should render selected items -->
                 <template v-slot:selection="{ item, index }">
-                  <v-chip v-if="index === 0">
+                  <v-chip v-if="index === 0" color="indigo lighten-1" dark>
                     <span>{{ item.name + ' ' + item.surname }}</span>
                   </v-chip>
                   <span
@@ -58,6 +46,20 @@
                   </span>
                 </template>
               </v-select>
+            </v-col>
+            <v-col cols="12" sm="6" md="6">
+              <v-date-picker
+                  v-model="date"
+                  color="indigo lighten-1"
+              ></v-date-picker>
+            </v-col>
+            <v-col cols="12" sm="6" md="6">
+              <v-time-picker
+                  v-model="time"
+                  color="indigo lighten-1"
+                  width="260"
+                  format="24hr"
+              ></v-time-picker>
             </v-col>
           </v-row>
         </v-form>
@@ -80,7 +82,8 @@ export default {
   name: "AddLectureModal",
   props: {
     value: Boolean
-  },
+  }
+  ,
   data() {
     return {
       message: '',
@@ -88,13 +91,13 @@ export default {
       editedLecture: {
         type: "",
         date: "",
-        time: "",
         students: [],
         lecturer: '',
       },
       validator: {
         type: [],
         date: [],
+        time: [],
         students: [],
       },
       lectureTypes: [
@@ -103,6 +106,8 @@ export default {
       ],
       students: [],
       editedId: -1,
+      date: '',
+      time: '',
     }
   },
   methods: {
@@ -115,10 +120,15 @@ export default {
     },
     save() {
       if (this.$refs.form.validate()) {
+        let dateArr = this.date.split('-');
+        let timeArr = this.time.split(':');
+        let currentDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1]);
+        this.editedLecture.date = this.$moment(currentDate).format();
         LectureDataService.create(this.editedLecture)
-
+        console.log(this.time)
+        console.log(this.date)
         this.close();
-        //this.refresh();
+        this.refresh();
       }
     },
     getStudents() {
@@ -138,6 +148,9 @@ export default {
             }
           });
     },
+    refresh() {
+      this.$forceUpdate();
+    },
   },
   computed: {
     show: {
@@ -150,6 +163,9 @@ export default {
     },
     userData() {
       return this.$store.state.auth.userData;
+    },
+    formTitle() {
+      return this.editedId === -1 ? "New Lecture" : "Edit Lecture";
     },
   },
   mounted() {
