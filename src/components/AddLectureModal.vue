@@ -125,8 +125,6 @@ export default {
         let currentDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2], timeArr[0], timeArr[1]);
         this.editedLecture.date = this.$moment(currentDate).format();
         LectureDataService.create(this.editedLecture)
-        console.log(this.time)
-        console.log(this.date)
         this.close();
         this.refresh();
       }
